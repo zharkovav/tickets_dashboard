@@ -52,6 +52,7 @@ $config = [
         */
     ],
     'params' => $params,
+    'defaultRoute' => 'tickets',
 ];
 
 if (YII_ENV_DEV) {
