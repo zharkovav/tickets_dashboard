@@ -13,8 +13,6 @@ class m250725_204755_create_tickets_table extends Migration
      */
     public function safeUp()
     {
-        $this->dropTable('{{%tickets}}');
-        $this->dropTable('{{%state}}');
         $this->createTable('{{%state}}', [
             'id' => $this->primaryKey(),
             'state' => $this->string(),

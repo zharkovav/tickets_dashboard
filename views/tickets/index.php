@@ -63,6 +63,7 @@ Modal::end();
             'class' => 'btn btn-danger btn-delete-ticket',
             'data-id' => $ticket->id,
             ]) ?>
+            <?= Html::a('View', ['/tickets/view-ticket', 'id' => $ticket->id], ['class'=>'btn btn-primary']) ?>
         </td>
     </tr>
     <?php endforeach; ?>
@@ -153,13 +154,7 @@ $(document).on('beforeSubmit', '#ticket-form', function () {
         success: function (response) {
             if (response.success) {
                 $('#ticket-modal').modal('hide');
-                // $('.status-message').text(response.message).css('color', 'green');
-                $('#tickets-table > tbody:first').prepend(response.html); 
-                // var tableRef = document.getElementById('tickets-table');
-                // tableRef.append(response.html);
-                // var newRow = tableRef.insertRow(1);
-                // newRow.innerHTML = response.html;
-
+                $('#tickets-table > tbody:first').prepend(response.html);
             } else {
                 $('.status-message').text(response.message || 'Error, could not add ticket.').css('color', 'red');
             }

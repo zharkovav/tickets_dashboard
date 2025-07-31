@@ -27,5 +27,6 @@ use yii\helpers\ArrayHelper;
             'class' => 'btn btn-danger btn-delete-ticket',
             'data-id' => $model->id,
             ]) ?>
+            <?= Html::a('View', ['/tickets/view-ticket', 'id' => $model->id], ['class'=>'btn btn-primary']) ?>
         </td>
 </tr>

@@ -5,6 +5,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use Yii;
 use app\models\Ticket;
+use app\models\Comment;
 
 class TicketsController extends Controller
 {
@@ -68,7 +69,7 @@ class TicketsController extends Controller
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $id = Yii::$app->request->post('id');
-        $model = $model = Ticket::findOne($id);
+        $model = Ticket::findOne($id);
 
         if ($model->delete()) {
             if (Yii::$app->request->isAjax) {
@@ -82,5 +83,34 @@ class TicketsController extends Controller
         }
 
         throw new \yii\web\ServerErrorHttpException('Error in: removing record.');
+    }
+
+    public function actionViewTicket($id)
+    {
+        $ticket = Ticket::findOne($id);
+        $comments = Comment::find()
+            ->where(['ticket_id' => $ticket->id])
+            ->orderBy('created_at')
+            ->all();
+        return $this->render('viewTicket', [
+            'ticket' => $ticket,
+            'comments' => $comments,
+        ]);
+    }
+
+    public function actionCreateComment()
+    {
+        $model = new Comment();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if ($model->save()) {
+                $model = Comment::findOne($model->id);
+                $html = $this->renderPartial('/tickets/_commentItem', ['comment' => $model]);
+                return ['success' => true, 'html' => $html];
+            }
+
+            return ['success' => false, 'errors' => $model->getErrors()];
+        }
     }
 }
