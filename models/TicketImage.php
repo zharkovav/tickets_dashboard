@@ -21,13 +21,13 @@ class TicketImage extends ActiveRecord
 
     public function getUrl()
     {
-        return '@webroot/uploads/tickets/' . $this->filename;
+        return 'uploads/request/' . $this->ticket_id . '/' . $this->filename;
     }
 
     public function beforeDelete()
     {
         if (parent::beforeDelete()) {
-            @unlink(\Yii::getAlias('@webroot/uploads/tasks/' . $this->filename));
+            @unlink(\Yii::getAlias('uploads/request/' . $this->ticket_id . '/' . $this->filename));
             return true;
         }
         return false;

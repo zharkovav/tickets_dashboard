@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\web\UploadedFile;
 use yii\web\Response;
 use app\models\TicketImage;
+use yii\helpers\FileHelper;
 
 class TicketImageController extends Controller
 {
@@ -29,7 +30,11 @@ class TicketImageController extends Controller
         }
 
         $model->filename = uniqid() . '.' . $file->extension;
-        $path = Yii::getAlias('@webroot/request/') . $ticket_id . '/' . $model->filename;
+        $src_path = $path = Yii::getAlias('@webroot/uploads/request/') . $ticket_id;
+        if (!is_dir($src_path)) {
+            FileHelper::createDirectory($src_path, 0775, true);
+        }
+        $path = $src_path . '/' . $model->filename;
 
         if ($model->validate() && $file->saveAs($path)) {
             $model->save(false);

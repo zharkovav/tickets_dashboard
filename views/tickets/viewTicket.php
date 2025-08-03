@@ -51,7 +51,7 @@ $this->title = $ticket->title;
     </tbody>
 </table>
 
-<h4>Изображения</h4>
+<h4>Images</h4>
 
 <div id="image-upload-block">
     <input type="file" id="image-upload" accept="image/png,image/jpeg">
@@ -159,10 +159,17 @@ $(document).on('click', '.delete-image', function() {
     var wrap = $(this).closest('.img-wrap');
     var id = wrap.data('id');
 
-    $.post('$deleteUrl?id=' + id, function(res) {
-        if (res.success) {
-            wrap.remove();
-        } else {
+    $.ajax({
+        url: '$deleteUrl' + '&id=' + id,
+        type: 'post',
+        success: function(res) {
+            if (res.success) {
+                wrap.remove();
+            } else {
+                alert('Error in: image delete.');
+            }
+        },
+        error: function() {
             alert('Error in: image delete.');
         }
     });
